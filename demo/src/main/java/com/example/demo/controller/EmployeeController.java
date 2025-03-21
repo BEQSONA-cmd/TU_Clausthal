@@ -39,11 +39,21 @@ public class EmployeeController {
 
         return ResponseEntity.ok(employee);
     }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        if (employee == null)
+            return ResponseEntity.notFound().build();
+
+        employeeRepository.delete(employee);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
         Employee newEmployee = employeeRepository.save(employee);
         return ResponseEntity.status(HttpStatus.CREATED).body(newEmployee);
     }
-
+    
 }
